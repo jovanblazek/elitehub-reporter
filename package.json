@@ -13,7 +13,7 @@
     "generate-types": "prisma generate",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "start": "cd build && node src/index.js"
+    "start": "cd build && node index.js"
   },
   "repository": {
     "type": "git",
