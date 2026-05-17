@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/jovanblazek/ED-Reporter/compare/v1.1.0...v1.1.1) (2026-05-17)
+
+
+### :bug: Bug Fixes
+
+* Bump deps ([#3](https://github.com/jovanblazek/ED-Reporter/issues/3)) ([bfa4583](https://github.com/jovanblazek/ED-Reporter/commit/bfa458351a91c9d9873338cdbbbf3bfca87bba19))
+
 ## [1.1.0](https://github.com/jovanblazek/ED-Reporter/compare/v1.0.0...v1.1.0) (2024-06-09)
 
 
