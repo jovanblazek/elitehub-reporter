@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/jovanblazek/ED-Reporter/compare/v1.1.1...v1.1.2) (2026-05-17)
+
+
+### :bug: Bug Fixes
+
+* Invalid start command ([#4](https://github.com/jovanblazek/ED-Reporter/issues/4)) ([9a59ae1](https://github.com/jovanblazek/ED-Reporter/commit/9a59ae1635f8c99cde7d8d495e7a5f57aeec5152))
+
 ## [1.1.1](https://github.com/jovanblazek/ED-Reporter/compare/v1.1.0...v1.1.1) (2026-05-17)
 
 
