@@ -57,7 +57,7 @@ export const reportNews = async ({
       }
 
       const channel = await client.channels.fetch(channelId)
-      if (channel && channel.isTextBased()) {
+      if (channel && channel.isTextBased() && channel.isSendable()) {
         await channel.send({
           embeds: articlesForSubscriber.map((article) => createEmbed(article)),
         })

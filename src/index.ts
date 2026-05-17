@@ -23,6 +23,7 @@ BotClient.once('ready', (client) => {
   scheduleCronJob({ schedule: SCHEDULE.NIGHT, client })
 })
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 BotClient.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) {
     return
@@ -37,10 +38,20 @@ BotClient.on('interactionCreate', async (interaction) => {
       await executeUnsubscribeCommand({ interaction })
     }
   } catch (error) {
-    await interaction.reply(`Something went wrong 😔`)
+    try {
+      if (interaction.deferred || interaction.replied) {
+        await interaction.editReply('Something went wrong 😔')
+      } else {
+        await interaction.reply({ content: 'Something went wrong 😔', ephemeral: true })
+      }
+    } catch (replyError) {
+      logger.error('Failed to send error response to interaction', replyError)
+    }
     logger.error('Error while handling command', error)
   }
 })
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 BotClient.on('guildDelete', async (guild) => {
   logger.info(`Left guild ${guild.name} (${guild.id})`)
   // Try catch because prisma does not have delete if exists
@@ -68,6 +79,31 @@ KoaApp.use((ctx) => {
     timestamp: new Date().toISOString(),
   }
 })
-KoaApp.listen(process.env.PORT, () => {
+
+const KoaServer = KoaApp.listen(process.env.PORT, () => {
   logger.info(`Koa server is running on port ${process.env.PORT!}`)
+})
+
+const shutdown = async () => {
+  logger.info('Shutting down...')
+  await BotClient.destroy()
+  logger.info('Bot client destroyed')
+
+  // Close Koa server
+  logger.info('[Koa] Closing server...')
+  await new Promise<void>((resolve) => {
+    KoaServer.close(() => resolve())
+  })
+  logger.info('[Koa] Server closed')
+
+  await Prisma.$disconnect()
+  logger.info('Prisma disconnected')
+  process.exit(0)
+}
+
+process.on('SIGTERM', () => {
+  void shutdown()
+})
+process.on('SIGINT', () => {
+  void shutdown()
 })

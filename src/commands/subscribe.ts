@@ -1,12 +1,17 @@
 import { Language } from '@prisma/client'
-import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
+import {
+  ChatInputCommandInteraction,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+} from 'discord.js'
 import { Commands } from '../constants'
 import { Prisma } from '../utils'
 
 export const SubscribeCommandBuilder = new SlashCommandBuilder()
   .setName(Commands.SUBSCRIBE)
   .setDescription('Subscribe to the Galnet news')
-  .setDMPermission(false)
+  .setContexts([InteractionContextType.Guild])
   .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
   .addChannelOption((option) =>
     option.setName('channel').setDescription('The channel to send the news to').setRequired(true)
@@ -27,6 +32,7 @@ export const executeSubscribeCommand = async ({
   interaction: ChatInputCommandInteraction
 }) => {
   await interaction.deferReply({ ephemeral: true })
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const channelId = interaction.options.getChannel('channel')?.id
   const language = interaction.options.getString('language') as Language
   const { guildId } = interaction
